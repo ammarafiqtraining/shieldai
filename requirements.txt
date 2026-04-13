@@ -1,0 +1,29 @@
+# ShieldAI — Phishing & Scam Detection Platform
+# Install: pip install -r requirements.txt
+
+# --- Web framework ---
+fastapi>=0.111.0
+uvicorn[standard]>=0.29.0
+python-multipart>=0.0.9
+
+# --- Data validation ---
+pydantic>=2.7.0
+pydantic-settings>=2.2.0
+
+# --- Machine learning (brain module) ---
+scikit-learn>=1.4.0
+xgboost>=2.0.0
+numpy>=1.26.0
+pandas>=2.2.0
+joblib>=1.4.0
+
+# --- NLP layer (optional — TinyBERT) ---
+# Uncomment to enable the NLP layer (requires ~500 MB download on first run)
+# torch>=2.2.0
+# transformers>=4.40.0
+
+# --- Explainability ---
+# shap>=0.45.0   # optional — enables XGBoost SHAP explanations
+
+# --- Environment ---
+python-dotenv>=1.0.0

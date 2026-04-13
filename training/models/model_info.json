@@ -1,0 +1,107 @@
+{
+  "version": "v1",
+  "created_at": "2026-04-07T22:55:44Z",
+  "models": {
+    "rf": "phishing_model_rf_v1.pkl",
+    "lr": "phishing_model_lr_v1.pkl"
+  },
+  "feature_names_file": "feature_names.pkl",
+  "data_version": "v1",
+  "target_metric": "recall",
+  "target_threshold": 0.9,
+  "rf_params": {
+    "n_estimators": 100,
+    "max_depth": 20,
+    "min_samples_split": 5,
+    "min_samples_leaf": 2,
+    "n_jobs": -1,
+    "random_state": 42
+  },
+  "lr_params": {
+    "max_iter": 1000,
+    "random_state": 42,
+    "solver": "lbfgs"
+  },
+  "feature_importance_top20": [
+    {
+      "feature": "google_index",
+      "importance": 0.19733436621420586
+    },
+    {
+      "feature": "page_rank",
+      "importance": 0.09533962883775361
+    },
+    {
+      "feature": "nb_hyperlinks",
+      "importance": 0.0877598275151216
+    },
+    {
+      "feature": "web_traffic",
+      "importance": 0.0808000629175275
+    },
+    {
+      "feature": "nb_www",
+      "importance": 0.034995187127323725
+    },
+    {
+      "feature": "phish_hints",
+      "importance": 0.030445840483221045
+    },
+    {
+      "feature": "safe_anchor",
+      "importance": 0.030294481320230618
+    },
+    {
+      "feature": "ratio_intHyperlinks",
+      "importance": 0.030178017943472607
+    },
+    {
+      "feature": "domain_age",
+      "importance": 0.028906229323170586
+    },
+    {
+      "feature": "ratio_extHyperlinks",
+      "importance": 0.028149743854212216
+    },
+    {
+      "feature": "longest_word_path",
+      "importance": 0.024534630740295924
+    },
+    {
+      "feature": "ratio_extRedirection",
+      "importance": 0.022379264418062136
+    },
+    {
+      "feature": "ratio_digits_url",
+      "importance": 0.020306354969077733
+    },
+    {
+      "feature": "length_url",
+      "importance": 0.018332641119131177
+    },
+    {
+      "feature": "longest_words_raw",
+      "importance": 0.015709802012444634
+    },
+    {
+      "feature": "length_words_raw",
+      "importance": 0.014964489494133502
+    },
+    {
+      "feature": "char_repeat",
+      "importance": 0.014337338493456545
+    },
+    {
+      "feature": "links_in_tags",
+      "importance": 0.014280867356200575
+    },
+    {
+      "feature": "length_hostname",
+      "importance": 0.014210227231692947
+    },
+    {
+      "feature": "avg_word_path",
+      "importance": 0.013968697319603809
+    }
+  ]
+}

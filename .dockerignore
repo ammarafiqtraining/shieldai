@@ -1,0 +1,41 @@
+# Git
+.git
+.gitignore
+
+# Byte-compiled files
+__pycache__
+*.py[cod]
+*.pyo
+
+# Environments
+.env
+.venv
+venv/
+env/
+
+# Training data (large CSV files — not needed at runtime)
+data/
+
+# Documentation source
+docs/
+
+# Test suite
+tests/
+
+# The old prototype folder — runtime uses brain/ + api/ only
+hackathon_updated/
+
+# IDE / editor artefacts
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS artefacts
+.DS_Store
+Thumbs.db
+
+# Docker files themselves (avoid recursive COPY issues)
+Dockerfile
+docker-compose.yml
+.dockerignore

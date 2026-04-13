@@ -1,0 +1,40 @@
+services:
+  shieldai:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: shieldai
+    ports:
+      - "8080:8000"        # UI + API available at http://localhost:8080
+    env_file:
+      - .env               # loads HOST, PORT, VT_API_KEY, ALLOWED_ORIGINS, etc.
+    environment:
+      HOST: "0.0.0.0"
+      PORT: "8000"
+      RELOAD: "false"
+      ALLOWED_ORIGINS: "*"
+      # DB path inside the container — maps to the named volume below
+      DB_PATH: "/app/data/shieldai.db"
+    volumes:
+      # Persist trained models between container restarts
+      - shieldai_models:/app/brain/models
+      # Persist SQLite database + VT cache between restarts
+      - shieldai_data:/app/data
+      # Persist application logs
+      - shieldai_logs:/app/logs
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c",
+             "import urllib.request; urllib.request.urlopen('http://localhost:8000/api/health')"]
+      interval: 30s
+      timeout: 10s
+      start_period: 20s
+      retries: 3
+
+volumes:
+  shieldai_models:
+    driver: local
+  shieldai_data:
+    driver: local
+  shieldai_logs:
+    driver: local

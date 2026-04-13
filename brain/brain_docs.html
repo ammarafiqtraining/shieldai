@@ -1,0 +1,1232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Brain Module — Documentation</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:       #0a0c10;
+    --surface:  #111418;
+    --card:     #161b22;
+    --border:   #21262d;
+    --red:      #e8344a;
+    --red-dim:  #3d1218;
+    --green:    #2ea043;
+    --green-dim:#0d2b17;
+    --orange:   #d29922;
+    --orange-dim:#2b1d0a;
+    --blue:     #388bfd;
+    --blue-dim: #0c1f3d;
+    --text:     #e6edf3;
+    --muted:    #8b949e;
+    --code-bg:  #161b22;
+    --mono:     'JetBrains Mono', monospace;
+    --sans:     'DM Sans', sans-serif;
+    --display:  'Syne', sans-serif;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 15px;
+    line-height: 1.7;
+    min-height: 100vh;
+  }
+
+  /* ── Layout ── */
+  .layout { display: flex; min-height: 100vh; }
+
+  /* ── Sidebar ── */
+  .sidebar {
+    width: 260px;
+    min-width: 260px;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    padding: 28px 0;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+  }
+  .sidebar-brand {
+    padding: 0 24px 24px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 16px;
+  }
+  .brand-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--red-dim);
+    border: 1px solid var(--red);
+    border-radius: 6px;
+    padding: 4px 10px;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--red);
+    letter-spacing: .05em;
+    margin-bottom: 12px;
+  }
+  .sidebar-brand h2 {
+    font-family: var(--display);
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--text);
+  }
+  .sidebar-brand p {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 3px;
+  }
+  .nav-section {
+    padding: 0 12px;
+    margin-bottom: 8px;
+  }
+  .nav-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    color: var(--muted);
+    padding: 0 12px 6px;
+  }
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 13px;
+    color: var(--muted);
+    transition: all .15s;
+    text-decoration: none;
+  }
+  .nav-item:hover { background: var(--card); color: var(--text); }
+  .nav-item.active { background: var(--red-dim); color: var(--red); }
+  .nav-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+    flex-shrink: 0;
+  }
+
+  /* ── Main ── */
+  .main {
+    flex: 1;
+    max-width: 900px;
+    padding: 48px 52px;
+    overflow-x: hidden;
+  }
+
+  /* ── Hero ── */
+  .hero {
+    margin-bottom: 52px;
+    padding-bottom: 40px;
+    border-bottom: 1px solid var(--border);
+  }
+  .hero-eyebrow {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: .12em;
+    color: var(--red);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .hero h1 {
+    font-family: var(--display);
+    font-size: 42px;
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: 16px;
+  }
+  .hero h1 span { color: var(--red); }
+  .hero-desc {
+    font-size: 16px;
+    color: var(--muted);
+    max-width: 620px;
+    line-height: 1.75;
+    font-weight: 300;
+  }
+
+  /* ── Sections ── */
+  .section {
+    margin-bottom: 56px;
+    display: none;
+  }
+  .section.active { display: block; }
+
+  .section-title {
+    font-family: var(--display);
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .section-title .icon {
+    width: 32px; height: 32px;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 8px;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  .section-sub {
+    color: var(--muted);
+    font-size: 14px;
+    margin-bottom: 28px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  /* ── Cards ── */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 16px;
+  }
+  .card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+  }
+  .card-title {
+    font-family: var(--mono);
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text);
+  }
+  .badge {
+    font-family: var(--mono);
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-weight: 700;
+    letter-spacing: .05em;
+  }
+  .badge-red    { background: var(--red-dim);    color: var(--red);    border: 1px solid var(--red); }
+  .badge-green  { background: var(--green-dim);  color: var(--green);  border: 1px solid var(--green); }
+  .badge-orange { background: var(--orange-dim); color: var(--orange); border: 1px solid var(--orange); }
+  .badge-blue   { background: var(--blue-dim);   color: var(--blue);   border: 1px solid var(--blue); }
+
+  /* ── Code blocks ── */
+  pre {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px;
+    overflow-x: auto;
+    font-family: var(--mono);
+    font-size: 12.5px;
+    line-height: 1.7;
+    margin: 12px 0 20px;
+    position: relative;
+  }
+  .code-label {
+    position: absolute;
+    top: 10px; right: 14px;
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: .08em;
+  }
+  .kw  { color: #ff7b72; }
+  .fn  { color: #d2a8ff; }
+  .str { color: #a5d6ff; }
+  .cm  { color: #8b949e; font-style: italic; }
+  .num { color: #79c0ff; }
+  .cls { color: #ffa657; }
+
+  /* ── Cascade flow diagram ── */
+  .cascade {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin: 24px 0;
+  }
+  .cascade-step {
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+  }
+  .cascade-left {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 48px;
+    flex-shrink: 0;
+  }
+  .cascade-node {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--mono);
+    font-size: 13px;
+    font-weight: 700;
+    flex-shrink: 0;
+    z-index: 1;
+  }
+  .cascade-line {
+    width: 2px;
+    flex: 1;
+    min-height: 24px;
+    margin: 0 auto;
+  }
+  .cascade-body {
+    flex: 1;
+    padding: 0 0 28px 16px;
+  }
+  .cascade-title {
+    font-family: var(--display);
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-top: 6px;
+  }
+  .cascade-desc { font-size: 13px; color: var(--muted); line-height: 1.6; }
+  .cascade-exit {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-family: var(--mono);
+    font-size: 11px;
+    padding: 3px 10px;
+    border-radius: 4px;
+    margin-top: 8px;
+  }
+
+  /* ── Feature grid ── */
+  .feat-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin: 16px 0;
+  }
+  .feat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 16px;
+  }
+  .feat-card-title {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: .07em;
+    margin-bottom: 10px;
+  }
+  .feat-tag {
+    display: inline-block;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 2px 8px;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text);
+    margin: 2px 2px 2px 0;
+  }
+
+  /* ── Score gauge ── */
+  .gauge-demo {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 24px;
+    margin: 16px 0;
+  }
+  .gauge-label { font-size: 13px; color: var(--muted); margin-bottom: 12px; }
+  .gauge-track {
+    height: 12px;
+    background: var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+    position: relative;
+    margin-bottom: 8px;
+  }
+  .gauge-bar {
+    height: 100%;
+    border-radius: 6px;
+    transition: width .5s ease;
+    background: linear-gradient(90deg, #2ea043 0%, #d29922 45%, #e8344a 75%, #8b0000 100%);
+  }
+  .gauge-ticks {
+    display: flex;
+    justify-content: space-between;
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--muted);
+  }
+  .gauge-verdicts {
+    display: flex;
+    gap: 8px;
+    margin-top: 16px;
+    flex-wrap: wrap;
+  }
+  .verdict-pill {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: opacity .2s;
+    border: 1px solid transparent;
+  }
+  .verdict-pill.v-clean    { background: var(--green-dim);  color: var(--green);  border-color: var(--green); }
+  .verdict-pill.v-warn     { background: var(--orange-dim); color: var(--orange); border-color: var(--orange); }
+  .verdict-pill.v-high     { background: var(--red-dim);    color: var(--red);    border-color: var(--red); }
+  .verdict-pill.v-scam     { background: #1a0508;           color: #ff4d6d;       border-color: #ff4d6d; }
+  .verdict-pill:hover { opacity: .85; }
+
+  /* ── Try it ── */
+  .tryit-wrap {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 24px;
+    margin-top: 16px;
+  }
+  .tryit-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    margin-bottom: 10px;
+  }
+  textarea {
+    width: 100%;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text);
+    font-family: var(--mono);
+    font-size: 12.5px;
+    padding: 12px 14px;
+    resize: vertical;
+    min-height: 80px;
+    outline: none;
+    line-height: 1.6;
+    transition: border-color .2s;
+  }
+  textarea:focus { border-color: var(--blue); }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 9px 18px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 500;
+    transition: all .15s;
+    margin-top: 10px;
+  }
+  .btn-red { background: var(--red); color: #fff; }
+  .btn-red:hover { background: #c42d41; }
+  .btn-ghost { background: var(--card); color: var(--text); border: 1px solid var(--border); }
+  .btn-ghost:hover { background: var(--border); }
+  .result-box {
+    margin-top: 16px;
+    padding: 16px;
+    border-radius: 8px;
+    font-family: var(--mono);
+    font-size: 12.5px;
+    line-height: 1.7;
+    display: none;
+    border-left: 3px solid var(--border);
+  }
+  .result-box.visible { display: block; }
+  .samples { display: flex; flex-wrap: wrap; gap: 6px; margin: 10px 0; }
+  .sample-btn {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    padding: 4px 10px;
+    font-size: 11px;
+    font-family: var(--mono);
+    color: var(--muted);
+    cursor: pointer;
+    transition: all .15s;
+  }
+  .sample-btn:hover { border-color: var(--blue); color: var(--text); }
+
+  /* ── File tree ── */
+  .file-tree {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px;
+    font-family: var(--mono);
+    font-size: 12.5px;
+    line-height: 1.9;
+  }
+  .tree-dir  { color: var(--blue); }
+  .tree-file { color: var(--text); }
+  .tree-cm   { color: var(--muted); }
+
+  /* ── Utility ── */
+  p { margin-bottom: 14px; }
+  p:last-child { margin-bottom: 0; }
+  strong { color: var(--text); font-weight: 600; }
+  .text-muted { color: var(--muted); }
+  .mt-16 { margin-top: 16px; }
+  .highlight {
+    background: var(--red-dim);
+    border: 1px solid var(--red);
+    border-radius: 6px;
+    padding: 12px 16px;
+    font-size: 13px;
+    margin: 16px 0;
+  }
+  .info-box {
+    background: var(--blue-dim);
+    border: 1px solid var(--blue);
+    border-radius: 6px;
+    padding: 12px 16px;
+    font-size: 13px;
+    margin: 16px 0;
+    color: #9ecfff;
+  }
+  .divider { border: none; border-top: 1px solid var(--border); margin: 28px 0; }
+
+  @media (max-width: 820px) {
+    .sidebar { display: none; }
+    .main { padding: 28px 20px; }
+    .feat-grid { grid-template-columns: 1fr; }
+    .hero h1 { font-size: 28px; }
+  }
+</style>
+</head>
+<body>
+<div class="layout">
+
+<!-- ── Sidebar ─────────────────────────────────────────── -->
+<nav class="sidebar">
+  <div class="sidebar-brand">
+    <div class="brand-badge">🛡 BRAIN MODULE</div>
+    <h2>Documentation</h2>
+    <p>AI Fraud Detection System</p>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-label">Getting Started</div>
+    <a class="nav-item active" onclick="show('overview')">
+      <span class="nav-dot"></span> Overview
+    </a>
+    <a class="nav-item" onclick="show('architecture')">
+      <span class="nav-dot"></span> Architecture
+    </a>
+    <a class="nav-item" onclick="show('files')">
+      <span class="nav-dot"></span> File Structure
+    </a>
+  </div>
+
+  <div class="nav-section" style="margin-top:8px;">
+    <div class="nav-label">Core Modules</div>
+    <a class="nav-item" onclick="show('layer1')">
+      <span class="nav-dot"></span> Layer 1 — Rule Engine
+    </a>
+    <a class="nav-item" onclick="show('layer2')">
+      <span class="nav-dot"></span> Layer 2 — XGBoost ML
+    </a>
+    <a class="nav-item" onclick="show('layer3')">
+      <span class="nav-dot"></span> Layer 3 — TinyBERT NLP
+    </a>
+    <a class="nav-item" onclick="show('features')">
+      <span class="nav-dot"></span> Feature Engineering
+    </a>
+    <a class="nav-item" onclick="show('pipeline')">
+      <span class="nav-dot"></span> Pipeline Orchestrator
+    </a>
+  </div>
+
+  <div class="nav-section" style="margin-top:8px;">
+    <div class="nav-label">Usage</div>
+    <a class="nav-item" onclick="show('training')">
+      <span class="nav-dot"></span> Training Guide
+    </a>
+    <a class="nav-item" onclick="show('scoring')">
+      <span class="nav-dot"></span> Risk Scoring
+    </a>
+    <a class="nav-item" onclick="show('tryit')">
+      <span class="nav-dot"></span> Interactive Demo
+    </a>
+  </div>
+</nav>
+
+<!-- ── Main ────────────────────────────────────────────── -->
+<main class="main">
+
+  <!-- Hero (always visible) -->
+  <div class="hero">
+    <div class="hero-eyebrow">Week 1 Deliverable · Brain Module v1.0</div>
+    <h1>The <span>Brain</span> —<br>Detection Engine</h1>
+    <p class="hero-desc">
+      A three-layer cascade that classifies any text input as scam or legitimate
+      in under 500ms. Designed to run on CPU with no GPU required, consuming
+      minimal resources while maintaining enterprise-grade accuracy.
+    </p>
+  </div>
+
+  <!-- ── Overview ─────────────────────────────────────── -->
+  <div class="section active" id="sec-overview">
+    <div class="section-title">
+      <div class="icon" style="background:#1c2a1e">🧠</div>
+      What is the Brain?
+    </div>
+    <div class="section-sub">A plain-English explanation — no technical background required.</div>
+
+    <p>
+      Imagine three security guards standing at a gate, in order. The <strong>first guard</strong>
+      is very fast and knows exactly what a scammer looks like from a checklist of known tricks.
+      If they spot something obvious — they stop it immediately.
+    </p>
+    <p>
+      If the first guard is unsure, the <strong>second guard</strong> is a statistician. They
+      have studied thousands of past scam messages and can spot hidden patterns — things like
+      "this message has too many urgency words and a suspicious-looking link."
+    </p>
+    <p>
+      If the second guard is still not sure, the <strong>third guard</strong> is a language
+      expert. They actually <em>read and understand</em> the meaning of the message — catching
+      sophisticated scams that cleverly avoid trigger words.
+    </p>
+
+    <div class="highlight">
+      <strong>Key insight:</strong> ~60% of scam traffic is caught by Guard 1 in ~1ms.
+      Only the hardest ~15% of cases ever reach Guard 3. This keeps the system fast and cheap.
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">What the Brain can analyze</span>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <span class="badge badge-blue">💬 SMS / Chat messages</span>
+        <span class="badge badge-blue">📧 Emails (subject + body)</span>
+        <span class="badge badge-blue">🔗 URLs and links</span>
+        <span class="badge badge-blue">📋 Any raw text</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Architecture ─────────────────────────────────── -->
+  <div class="section" id="sec-architecture">
+    <div class="section-title">
+      <div class="icon" style="background:#1c1c2e">🏗</div>
+      How the Cascade Works
+    </div>
+    <div class="section-sub">The three-layer funnel — each layer only runs if the previous one is uncertain.</div>
+
+    <div class="cascade">
+
+      <div class="cascade-step">
+        <div class="cascade-left">
+          <div class="cascade-node" style="background:var(--red-dim);color:var(--red);border:2px solid var(--red)">1</div>
+          <div class="cascade-line" style="background:var(--border)"></div>
+        </div>
+        <div class="cascade-body">
+          <div class="cascade-title">
+            Rule Engine
+            <span class="badge badge-red">~1ms</span>
+          </div>
+          <div class="cascade-desc">
+            Runs 25 compiled regular expressions against the input.
+            Catches known scam templates instantly: OTP harvesting, fake bank alerts,
+            government impersonation, prize scams, malicious IP-based URLs.
+          </div>
+          <div class="cascade-exit" style="background:var(--green-dim);color:var(--green);border:1px solid var(--green)">
+            ✓ Exits here if score &gt; 88% or &lt; 8%
+          </div>
+        </div>
+      </div>
+
+      <div class="cascade-step">
+        <div class="cascade-left">
+          <div class="cascade-node" style="background:var(--orange-dim);color:var(--orange);border:2px solid var(--orange)">2</div>
+          <div class="cascade-line" style="background:var(--border)"></div>
+        </div>
+        <div class="cascade-body">
+          <div class="cascade-title">
+            XGBoost ML
+            <span class="badge badge-orange">~10ms</span>
+          </div>
+          <div class="cascade-desc">
+            Extracts 28 numerical features (word counts, ratios, URL signals,
+            domain entropy, brand mentions) and feeds them to a trained
+            gradient-boosted tree model. SHAP values identify the top contributing factors.
+          </div>
+          <div class="cascade-exit" style="background:var(--green-dim);color:var(--green);border:1px solid var(--green)">
+            ✓ Exits here if ML confidence &gt; 82% or &lt; 15%
+          </div>
+        </div>
+      </div>
+
+      <div class="cascade-step">
+        <div class="cascade-left">
+          <div class="cascade-node" style="background:var(--blue-dim);color:var(--blue);border:2px solid var(--blue)">3</div>
+        </div>
+        <div class="cascade-body">
+          <div class="cascade-title">
+            TinyBERT NLP
+            <span class="badge badge-blue">~200ms</span>
+          </div>
+          <div class="cascade-desc">
+            Fine-tuned transformer model that understands the <em>meaning</em> of the message.
+            Catches social engineering that deliberately avoids all keywords —
+            e.g. professionally worded Business Email Compromise attacks.
+          </div>
+          <div class="cascade-exit" style="background:var(--blue-dim);color:var(--blue);border:1px solid var(--blue)">
+            ← Only ~15% of traffic reaches here
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="card mt-16">
+      <div class="card-header">
+        <span class="card-title">Ensemble Weighting</span>
+        <span class="badge badge-blue">Final Score Formula</span>
+      </div>
+      <pre style="margin:0"><span class="cm"># Weights must sum to 1.0</span>
+<span class="cls">Final</span> = <span class="num">0.20</span> × rule_score
+       + <span class="num">0.35</span> × xgboost_score
+       + <span class="num">0.45</span> × tinybert_score
+
+<span class="cm"># Then scale to 0–100</span>
+<span class="cls">RiskScore</span> = <span class="fn">int</span>(Final × <span class="num">100</span>)</pre>
+    </div>
+  </div>
+
+  <!-- ── Files ─────────────────────────────────────────── -->
+  <div class="section" id="sec-files">
+    <div class="section-title">
+      <div class="icon" style="background:#1c2430">📁</div>
+      File Structure
+    </div>
+    <div class="section-sub">Every file in the brain/ module and what it does.</div>
+
+    <div class="file-tree">
+<span class="tree-dir">brain/</span>
+├── <span class="tree-file">__init__.py</span>       <span class="tree-cm"># Public API: Brain, AnalysisResult, train_all</span>
+├── <span class="tree-file">rule_engine.py</span>    <span class="tree-cm"># Layer 1: 25 compiled regex patterns + noisy-OR scorer</span>
+├── <span class="tree-file">features.py</span>       <span class="tree-cm"># Extracts 28 numeric features from raw text</span>
+├── <span class="tree-file">ml_model.py</span>       <span class="tree-cm"># Layer 2: XGBoost train / load / predict / evaluate</span>
+├── <span class="tree-file">nlp_model.py</span>      <span class="tree-cm"># Layer 3: TinyBERT fine-tune / load / predict</span>
+├── <span class="tree-file">pipeline.py</span>       <span class="tree-cm"># Master orchestrator: Brain class + cascade logic</span>
+├── <span class="tree-file">training.py</span>       <span class="tree-cm"># One-command training script for all models</span>
+└── <span class="tree-dir">models/</span>            <span class="tree-cm"># Auto-created on first train</span>
+    ├── <span class="tree-file">xgb_model.json</span>   <span class="tree-cm"># Serialised XGBoost weights</span>
+    ├── <span class="tree-file">feature_names.json</span><span class="tree-cm"># Feature order for SHAP</span>
+    └── <span class="tree-dir">nlp_finetuned/</span>   <span class="tree-cm"># Hugging Face TinyBERT checkpoint</span>
+    </div>
+
+    <div class="info-box mt-16">
+      <strong>Rule of thumb:</strong> You should only ever need to import from
+      <code>brain/__init__.py</code>. The other files are internal implementation details.
+    </div>
+  </div>
+
+  <!-- ── Layer 1 ────────────────────────────────────────── -->
+  <div class="section" id="sec-layer1">
+    <div class="section-title">
+      <div class="icon" style="background:var(--red-dim)">📋</div>
+      Layer 1 — Rule Engine
+    </div>
+    <div class="section-sub">rule_engine.py — the fastest, cheapest first check.</div>
+
+    <p>
+      The Rule Engine is a list of 25 <strong>regular expressions</strong> — patterns that
+      describe what scam text looks like. Think of it like a spam filter but smarter,
+      with each pattern having a <em>weight</em> reflecting how strongly it indicates a scam.
+    </p>
+
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">Pattern Categories</span>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:4px">
+        <div style="font-size:13px;padding:8px 0;border-bottom:1px solid var(--border)">
+          <span style="color:var(--red)">●</span> Urgency pressure language
+        </div>
+        <div style="font-size:13px;padding:8px 0;border-bottom:1px solid var(--border)">
+          <span style="color:var(--red)">●</span> Account/credential harvesting
+        </div>
+        <div style="font-size:13px;padding:8px 0;border-bottom:1px solid var(--border)">
+          <span style="color:var(--orange)">●</span> Financial lures &amp; prizes
+        </div>
+        <div style="font-size:13px;padding:8px 0;border-bottom:1px solid var(--border)">
+          <span style="color:var(--orange)">●</span> Bank / government impersonation
+        </div>
+        <div style="font-size:13px;padding:8px 0">
+          <span style="color:var(--blue)">●</span> Suspicious URL patterns
+        </div>
+        <div style="font-size:13px;padding:8px 0">
+          <span style="color:var(--blue)">●</span> Social engineering phrases
+        </div>
+      </div>
+    </div>
+
+    <p style="margin-top:16px">The <strong>Noisy-OR formula</strong> combines multiple pattern weights into a single score:</p>
+    <pre><span class="cm"># If pattern A (weight 0.7) AND pattern B (weight 0.8) both match:</span>
+combined = <span class="num">1</span> - (<span class="num">1</span> - <span class="num">0.7</span>) × (<span class="num">1</span> - <span class="num">0.8</span>)
+         = <span class="num">1</span> - <span class="num">0.3</span> × <span class="num">0.2</span>
+         = <span class="num">1</span> - <span class="num">0.06</span> = <span class="num">0.94</span>  <span class="cm">← very high = definite scam</span>
+
+<span class="cm"># Why not just add the weights?
+# Addition can exceed 1.0. Noisy-OR always stays in [0, 1].</span></pre>
+
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">Usage</span>
+        <span class="badge badge-green">Python</span>
+      </div>
+<pre style="margin:0"><span class="kw">from</span> brain.rule_engine <span class="kw">import</span> score
+
+result = <span class="fn">score</span>(<span class="str">"Your Maybank account is suspended. Verify OTP now!"</span>)
+
+<span class="fn">print</span>(result.score)       <span class="cm"># 0.97</span>
+<span class="fn">print</span>(result.matched)     <span class="cm"># ['impersonate_bank', 'credential_suspend', 'credential_otp']</span>
+<span class="fn">print</span>(result.is_definite) <span class="cm"># True  → cascade exits here, no ML needed</span></pre>
+    </div>
+  </div>
+
+  <!-- ── Layer 2 ────────────────────────────────────────── -->
+  <div class="section" id="sec-layer2">
+    <div class="section-title">
+      <div class="icon" style="background:var(--orange-dim)">🌲</div>
+      Layer 2 — XGBoost ML
+    </div>
+    <div class="section-sub">ml_model.py — statistical pattern learning from thousands of examples.</div>
+
+    <p>
+      XGBoost builds a collection of <strong>300 decision trees</strong>, where each tree learns
+      from the mistakes of the previous one. This "boosting" approach is why it's so accurate
+      even on structured numerical data.
+    </p>
+
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">Training — what happens step by step</span>
+      </div>
+      <ol style="font-size:13px;line-height:2;padding-left:20px;color:var(--muted)">
+        <li>Split data: 85% training, 15% validation</li>
+        <li>Build Tree 1: tries to classify all samples</li>
+        <li>Identify mistakes from Tree 1</li>
+        <li>Build Tree 2: focuses on the mistakes of Tree 1</li>
+        <li>Repeat 300 times</li>
+        <li>Early stopping: halt if no improvement for 30 rounds (prevents overfitting)</li>
+        <li>Save final ensemble to <code>models/xgb_model.json</code></li>
+      </ol>
+    </div>
+
+    <pre><span class="kw">from</span> brain.ml_model <span class="kw">import</span> train_from_dataframe, MLModel
+<span class="kw">import</span> pandas <span class="kw">as</span> pd
+
+<span class="cm"># Train</span>
+df = pd.<span class="fn">read_csv</span>(<span class="str">"data/sms_spam.csv"</span>)
+model = <span class="fn">train_from_dataframe</span>(df, text_column=<span class="str">"text"</span>, label_column=<span class="str">"label"</span>)
+
+<span class="cm"># Or load previously trained</span>
+model = MLModel.<span class="fn">load</span>()
+
+<span class="cm"># Predict (needs feature vector from features.py)</span>
+<span class="kw">from</span> brain.features <span class="kw">import</span> extract
+fv = <span class="fn">extract</span>(<span class="str">"Click here to claim your free gift NOW"</span>)
+result = model.<span class="fn">predict</span>(fv.<span class="fn">to_list</span>())
+
+<span class="fn">print</span>(result.score)       <span class="cm"># 0.89</span>
+<span class="fn">print</span>(result.explanation) <span class="cm"># ['urgency_word_count', 'financial_word_count', 'has_short_url']</span></pre>
+  </div>
+
+  <!-- ── Layer 3 ────────────────────────────────────────── -->
+  <div class="section" id="sec-layer3">
+    <div class="section-title">
+      <div class="icon" style="background:var(--blue-dim)">🤖</div>
+      Layer 3 — TinyBERT NLP
+    </div>
+    <div class="section-sub">nlp_model.py — semantic understanding of language meaning.</div>
+
+    <p>
+      TinyBERT was pre-trained on Wikipedia and books — it understands English grammar and
+      meaning. <strong>Fine-tuning</strong> is the process of nudging those weights using your
+      scam/ham examples, teaching it what scam <em>language</em> looks like beyond keywords.
+    </p>
+
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">Why this catches what the others miss</span>
+      </div>
+      <p style="font-size:13px;color:var(--muted);margin-bottom:8px">
+        Consider this sophisticated BEC (Business Email Compromise) message:
+      </p>
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:12px;font-family:var(--mono);font-size:12px;color:var(--muted);line-height:1.7">
+        "Hi Sarah, as discussed in our call, please proceed with the payment
+        of RM 47,000 to the new supplier account. I'm in a meeting and can't
+        call — just reply to confirm and I'll approve."
+      </div>
+      <p style="font-size:13px;margin-top:10px">
+        <span style="color:var(--orange)">⚠</span> Rule engine: 0.12 (no obvious patterns)<br>
+        <span style="color:var(--orange)">⚠</span> XGBoost: 0.44 (borderline)<br>
+        <span style="color:var(--red)">✗</span> TinyBERT: <strong style="color:var(--red)">0.87</strong> — understands the social engineering context
+      </p>
+    </div>
+
+    <pre><span class="cm"># Fine-tune (run once, takes ~20-40min on CPU)</span>
+<span class="kw">from</span> brain.nlp_model <span class="kw">import</span> fine_tune
+<span class="kw">import</span> pandas <span class="kw">as</span> pd
+
+df = pd.<span class="fn">read_csv</span>(<span class="str">"data/sms_spam.csv"</span>)
+model = <span class="fn">fine_tune</span>(df, epochs=<span class="num">3</span>, batch_size=<span class="num">16</span>)
+
+<span class="cm"># Load and predict</span>
+<span class="kw">from</span> brain.nlp_model <span class="kw">import</span> NLPModel
+model = NLPModel.<span class="fn">load</span>()
+result = model.<span class="fn">predict</span>(<span class="str">"Please transfer the funds immediately"</span>)
+<span class="fn">print</span>(result.score)  <span class="cm"># 0.81</span></pre>
+  </div>
+
+  <!-- ── Features ──────────────────────────────────────── -->
+  <div class="section" id="sec-features">
+    <div class="section-title">
+      <div class="icon" style="background:#1c2020">⚙</div>
+      Feature Engineering
+    </div>
+    <div class="section-sub">features.py — 28 numerical signals extracted from every text input.</div>
+
+    <p>
+      Features are the numbers that the XGBoost model actually sees. Instead of raw text,
+      it gets 28 measurements — think of it like a blood test panel where each number tells
+      the doctor something specific.
+    </p>
+
+    <div class="feat-grid">
+      <div class="feat-card">
+        <div class="feat-card-title">📝 Lexical (7 features)</div>
+        <span class="feat-tag">char_count</span>
+        <span class="feat-tag">word_count</span>
+        <span class="feat-tag">digit_ratio</span>
+        <span class="feat-tag">caps_ratio</span>
+        <span class="feat-tag">text_entropy</span>
+        <span class="feat-tag">avg_word_length</span>
+        <span class="feat-tag">special_char_ratio</span>
+      </div>
+      <div class="feat-card">
+        <div class="feat-card-title">⚡ Urgency (3 features)</div>
+        <span class="feat-tag">urgency_word_count</span>
+        <span class="feat-tag">urgency_ratio</span>
+        <span class="feat-tag">exclamation_count</span>
+      </div>
+      <div class="feat-card">
+        <div class="feat-card-title">💰 Financial (3 features)</div>
+        <span class="feat-tag">financial_word_count</span>
+        <span class="feat-tag">has_currency_symbol</span>
+        <span class="feat-tag">has_amount_pattern</span>
+      </div>
+      <div class="feat-card">
+        <div class="feat-card-title">🔗 Link / URL (8 features)</div>
+        <span class="feat-tag">url_count</span>
+        <span class="feat-tag">has_ip_url</span>
+        <span class="feat-tag">has_short_url</span>
+        <span class="feat-tag">has_suspicious_tld</span>
+        <span class="feat-tag">max_url_length</span>
+        <span class="feat-tag">max_domain_entropy</span>
+        <span class="feat-tag">has_login_path</span>
+        <span class="feat-tag">has_http_only</span>
+      </div>
+      <div class="feat-card">
+        <div class="feat-card-title">🏷 Identity (2 features)</div>
+        <span class="feat-tag">brand_mention_count</span>
+        <span class="feat-tag">has_generic_greeting</span>
+      </div>
+      <div class="feat-card">
+        <div class="feat-card-title">🏗 Structure (5 features)</div>
+        <span class="feat-tag">question_mark_count</span>
+        <span class="feat-tag">line_count</span>
+        <span class="feat-tag">has_phone_number</span>
+        <span class="feat-tag">has_email_address</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Pipeline ──────────────────────────────────────── -->
+  <div class="section" id="sec-pipeline">
+    <div class="section-title">
+      <div class="icon" style="background:#1c1c1c">🎯</div>
+      Pipeline Orchestrator
+    </div>
+    <div class="section-sub">pipeline.py — the Brain class that ties everything together.</div>
+
+    <p>This is the only class the rest of the system (API, UI) ever needs to touch.</p>
+
+    <pre><span class="kw">from</span> brain <span class="kw">import</span> Brain
+
+<span class="cm"># Load all models (call once at startup)</span>
+brain = Brain.<span class="fn">load</span>()
+
+<span class="cm"># Analyze any text</span>
+result = brain.<span class="fn">analyze</span>(<span class="str">"Your CIMB account is suspended. Verify at http://1.2.3.4/login"</span>)
+
+<span class="fn">print</span>(result.score)         <span class="cm"># 94</span>
+<span class="fn">print</span>(result.verdict)       <span class="cm"># "scam"</span>
+<span class="fn">print</span>(result.explanation)   <span class="cm"># "HIGH CONFIDENCE SCAM. Top signals: Bank impersonation, IP-based URL, Account suspension threat."</span>
+<span class="fn">print</span>(result.layers_used)   <span class="cm"># ["rule"]  — caught at layer 1, done in 1ms</span>
+<span class="fn">print</span>(result.latency_ms)    <span class="cm"># 1.3</span>
+
+<span class="cm"># Analyze email</span>
+result = brain.<span class="fn">analyze_email</span>(
+    subject  = <span class="str">"Urgent: Action Required"</span>,
+    body     = <span class="str">"Dear customer, please verify..."</span>,
+    sender   = <span class="str">"security@maybank-verify.xyz"</span>,
+)
+
+<span class="cm"># Get full dict (for API response)</span>
+<span class="fn">print</span>(result.<span class="fn">to_dict</span>())</pre>
+  </div>
+
+  <!-- ── Training ──────────────────────────────────────── -->
+  <div class="section" id="sec-training">
+    <div class="section-title">
+      <div class="icon" style="background:#1c1c2e">🏋</div>
+      Training Guide
+    </div>
+    <div class="section-sub">How to train the models from scratch — step by step.</div>
+
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">Step 1 — Prepare your data</span>
+        <span class="badge badge-blue">data/</span>
+      </div>
+      <p style="font-size:13px;color:var(--muted)">Download these free datasets and place in the <code>data/</code> folder:</p>
+      <ol style="font-size:13px;line-height:2.2;padding-left:20px;color:var(--muted);margin-top:8px">
+        <li><strong style="color:var(--text)">sms_spam.csv</strong> — SMS Spam Collection (Kaggle) — columns: text, label</li>
+        <li><strong style="color:var(--text)">enron_email.csv</strong> — Enron Email Dataset (Kaggle) — columns: text, label</li>
+        <li><strong style="color:var(--text)">phishtank.csv</strong> — PhishTank CSV dump (phishtank.com) — columns: url, label</li>
+      </ol>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">Step 2 — Install dependencies</span>
+      </div>
+<pre style="margin:0">pip install xgboost scikit-learn shap pandas numpy
+pip install torch transformers   <span class="cm"># for TinyBERT (optional but recommended)</span></pre>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">Step 3 — Run training</span>
+        <span class="badge badge-green">~30-60 min</span>
+      </div>
+<pre style="margin:0"><span class="cm"># From the project root:</span>
+python -m brain.training
+
+<span class="cm"># Skip TinyBERT if you want faster training (~5 min):</span>
+python -m brain.training --skip-nlp
+
+<span class="cm"># Or from Python:</span>
+<span class="kw">from</span> brain <span class="kw">import</span> train_all
+<span class="fn">train_all</span>(data_dir=<span class="str">"data/"</span>)</pre>
+    </div>
+
+    <div class="info-box">
+      <strong>Expected output after training:</strong> Precision &gt; 93%, Recall &gt; 88%, F1 &gt; 90%.
+      If numbers are lower, try adding more training data or increasing <code>nlp_epochs</code> to 5.
+    </div>
+  </div>
+
+  <!-- ── Scoring ───────────────────────────────────────── -->
+  <div class="section" id="sec-scoring">
+    <div class="section-title">
+      <div class="icon" style="background:#1a0508">🎚</div>
+      Risk Scoring System
+    </div>
+    <div class="section-sub">How the 0–100 score maps to real-world actions.</div>
+
+    <div class="gauge-demo">
+      <div class="gauge-label">Risk Score Gauge — click a verdict to preview</div>
+      <div class="gauge-track">
+        <div class="gauge-bar" id="gaugeBar" style="width:5%"></div>
+      </div>
+      <div class="gauge-ticks">
+        <span>0</span><span>30</span><span>60</span><span>80</span><span>100</span>
+      </div>
+      <div class="gauge-verdicts">
+        <div class="verdict-pill v-clean" onclick="setGauge(15,'clean','#2ea043')">
+          ✅ 0–30 Clean
+        </div>
+        <div class="verdict-pill v-warn" onclick="setGauge(45,'suspicious','#d29922')">
+          ⚠️ 31–60 Suspicious
+        </div>
+        <div class="verdict-pill v-high" onclick="setGauge(72,'high_risk','#e8344a')">
+          🔴 61–80 High Risk
+        </div>
+        <div class="verdict-pill v-scam" onclick="setGauge(92,'scam','#8b0000')">
+          ☠️ 81–100 Scam
+        </div>
+      </div>
+      <div id="gaugeVerdict" style="margin-top:14px;font-size:13px;color:var(--muted);font-family:var(--mono)">
+        Click a verdict above to see the score
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Try It ─────────────────────────────────────────── -->
+  <div class="section" id="sec-tryit">
+    <div class="section-title">
+      <div class="icon" style="background:#1c2a1e">🧪</div>
+      Interactive Demo
+    </div>
+    <div class="section-sub">Simulate how the Rule Engine scores a message (no ML needed — runs in browser).</div>
+
+    <div class="tryit-wrap">
+      <div class="tryit-label">Sample Messages — click to load</div>
+      <div class="samples">
+        <button class="sample-btn" onclick="loadSample(0)">🏦 Bank scam</button>
+        <button class="sample-btn" onclick="loadSample(1)">🎁 Prize scam</button>
+        <button class="sample-btn" onclick="loadSample(2)">🔗 Phishing link</button>
+        <button class="sample-btn" onclick="loadSample(3)">📧 Normal email</button>
+        <button class="sample-btn" onclick="loadSample(4)">🏛 Gov impersonation</button>
+        <button class="sample-btn" onclick="loadSample(5)">💼 BEC attempt</button>
+      </div>
+      <div class="tryit-label" style="margin-top:12px">Paste or type a message</div>
+      <textarea id="demoInput" placeholder="Type or paste any message here…"></textarea>
+      <div style="display:flex;gap:8px;align-items:center">
+        <button class="btn btn-red" onclick="runDemo()">▶ Analyze</button>
+        <button class="btn btn-ghost" onclick="clearDemo()">Clear</button>
+      </div>
+      <div class="result-box" id="demoResult"></div>
+    </div>
+  </div>
+
+</main>
+</div>
+
+<script>
+// ── Navigation ──────────────────────────────────────────────────────────────
+function show(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('sec-' + id).classList.add('active');
+  event.currentTarget.classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ── Gauge ───────────────────────────────────────────────────────────────────
+function setGauge(score, label, color) {
+  document.getElementById('gaugeBar').style.width = score + '%';
+  const actions = {
+    clean:      'Deliver normally — no action needed.',
+    suspicious: 'Show warning to user. Ask them to review before clicking links.',
+    high_risk:  'Block delivery. Show full explanation. Log to audit trail.',
+    scam:       'Block + report to threat intel feed. Escalate to SOC if enterprise context.',
+  };
+  document.getElementById('gaugeVerdict').innerHTML =
+    `<span style="color:${color};font-weight:700">Score: ${score} — ${label.toUpperCase().replace('_',' ')}</span><br>
+     <span style="color:var(--muted)">${actions[label]}</span>`;
+}
+
+// ── Demo ────────────────────────────────────────────────────────────────────
+const SAMPLES = [
+  "Your Maybank account has been temporarily suspended. Verify your identity immediately at http://1.2.3.4/login or your account will be permanently closed.",
+  "Congratulations! You have been selected as our lucky winner. Claim your prize of RM 50,000 now. Click here: bit.ly/xyz123. Limited time offer - act now!",
+  "Dear customer, please click this link to verify your account: http://192.168.1.1/paypal-verify.php?token=abc123",
+  "Hi John, just a reminder that our team meeting is scheduled for Thursday at 2pm. Please bring the Q3 report. Thanks, Sarah",
+  "LHDN: Anda mempunyai tunggakan cukai sebanyak RM 3,200. Sila bayar segera atau anda akan didakwa. Hubungi kami di: bit.ly/lhdn-fine",
+  "Hi, as per our earlier discussion, can you please proceed with the vendor payment of RM 28,000 today? I'm travelling and can't call. Just reply to confirm.",
+];
+
+function loadSample(i) {
+  document.getElementById('demoInput').value = SAMPLES[i];
+}
+
+// Rule engine simulation (JavaScript port of rule_engine.py logic)
+const PATTERNS = [
+  { label: 'Bank impersonation',        re: /\b(maybank|cimb|rhb|public bank|hong leong|ambank|bsn).{0,40}(alert|notice|verify|suspend)/i, w: 0.85 },
+  { label: 'Government impersonation',  re: /\b(lhdn|pdrm|jpj|kwsp|epf|socso).{0,40}(fine|penalty|verify|claim|bayar)/i,                  w: 0.85 },
+  { label: 'OTP/credential harvesting', re: /\b(otp|pin|password|passcode).{0,25}(share|send|provide|enter)/i,                             w: 0.90 },
+  { label: 'Account suspension threat', re: /\b(account|card|service).{0,25}(suspend|block|restrict|close)/i,                              w: 0.80 },
+  { label: 'Prize/reward lure',         re: /\b(won|winner|selected|chosen|congratulations).{0,40}(prize|reward|gift|cash|rm)/i,            w: 0.85 },
+  { label: 'Urgency pressure',          re: /\b(act|respond|reply).{0,25}(now|immediately|urgent)/i,                                       w: 0.70 },
+  { label: 'Limited time pressure',     re: /\b(limited.{0,10}(time|offer)|last chance|expires? (today|now))/i,                            w: 0.65 },
+  { label: 'IP-based URL',              re: /https?:\/\/\d{1,3}(\.\d{1,3}){3}/i,                                                          w: 0.90 },
+  { label: 'URL shortener',             re: /https?:\/\/(bit\.ly|tinyurl|t\.co|rb\.gy|cutt\.ly)\//i,                                      w: 0.65 },
+  { label: 'Suspicious TLD',            re: /https?:\/\/[^\s]+\.(xyz|top|click|loan|gq|ml|cf|tk)\//i,                                     w: 0.75 },
+  { label: 'Verify account link',       re: /\b(verify|confirm|validate).{0,25}(account|identity|detail)/i,                               w: 0.80 },
+  { label: 'Money transfer request',    re: /\b(transfer|send|wire|bayar).{0,20}(money|fund|rm|amount)/i,                                  w: 0.70 },
+  { label: 'Secrecy instruction',       re: /\b(don.t|do not).{0,15}(tell|share|inform).{0,20}(anyone|others)/i,                          w: 0.85 },
+  { label: 'Generic greeting',          re: /\bdear\s+(customer|user|member|valued)\b/i,                                                   w: 0.60 },
+];
+
+function noisyOR(weights) {
+  let p = 1.0;
+  weights.forEach(w => p *= (1 - w));
+  return 1 - p;
+}
+
+function runDemo() {
+  const text = document.getElementById('demoInput').value.trim();
+  if (!text) { alert('Please enter a message first.'); return; }
+
+  const matched = PATTERNS.filter(p => p.re.test(text));
+  const score   = matched.length ? noisyOR(matched.map(p => p.w)) : 0;
+  const pct     = Math.min(Math.round(score * 100), 100);
+
+  let verdict, color, action;
+  if (pct <= 30)      { verdict = 'CLEAN';      color = '#2ea043'; action = 'Deliver normally.'; }
+  else if (pct <= 60) { verdict = 'SUSPICIOUS'; color = '#d29922'; action = 'Warn user before proceeding.'; }
+  else if (pct <= 80) { verdict = 'HIGH RISK';  color = '#e8344a'; action = 'Block + explain to user.'; }
+  else                { verdict = 'SCAM';       color = '#ff4d6d'; action = 'Block + report immediately.'; }
+
+  const layers = matched.length === 0
+    ? '<span style="color:#8b949e">Rule engine: clean exit → no ML needed</span>'
+    : '<span style="color:#d29922">Rule engine: ambiguous → XGBoost + TinyBERT would run next</span>';
+
+  const matchList = matched.length
+    ? matched.map(m => `  ● <span style="color:#e8344a">${m.label}</span> (weight: ${m.w})`).join('\n')
+    : '  (no patterns matched)';
+
+  const box = document.getElementById('demoResult');
+  box.style.borderLeftColor = color;
+  box.style.background = pct > 60 ? 'rgba(232,52,74,0.05)' : pct > 30 ? 'rgba(210,153,34,0.05)' : 'rgba(46,160,67,0.05)';
+  box.innerHTML = `<div style="font-size:18px;font-weight:700;color:${color};margin-bottom:12px">
+  Score: ${pct}/100 — ${verdict}
+</div>
+<div style="color:#8b949e;margin-bottom:4px">Matched patterns (Rule Engine only):</div>
+<div style="line-height:2">${matchList}</div>
+<div style="margin-top:12px;color:#8b949e">Layer routing:</div>
+<div>${layers}</div>
+<div style="margin-top:12px;padding:10px;background:rgba(255,255,255,0.03);border-radius:6px;color:#e6edf3">
+  ⚡ Action: ${action}
+</div>`;
+  box.classList.add('visible');
+}
+
+function clearDemo() {
+  document.getElementById('demoInput').value = '';
+  const box = document.getElementById('demoResult');
+  box.classList.remove('visible');
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,39 @@
+# ── Secrets — NEVER commit these ─────────────────────────────────────────────
+.env
+
+# ── Python ────────────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+.eggs/
+.venv/
+venv/
+env/
+
+# ── Trained model artifacts (large binary files) ─────────────────────────────
+brain/models/xgb_model.json
+brain/models/feature_names.json
+brain/models/nlp_finetuned/
+
+# ── Runtime data (generated, not source) ─────────────────────────────────────
+data/
+logs/
+
+# ── IDE / OS ──────────────────────────────────────────────────────────────────
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# ── Claude internal ───────────────────────────────────────────────────────────
+.claude/
+
+# ── Ignore the old prototype folder ──────────────────────────────────────────
+hackathon_updated/

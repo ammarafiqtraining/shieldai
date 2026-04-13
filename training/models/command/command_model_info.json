@@ -1,0 +1,24 @@
+{
+  "version": "v1",
+  "model_type": "LogisticRegression",
+  "vectorizer": "TfidfVectorizer",
+  "max_features": 1000,
+  "ngram_range": [
+    1,
+    3
+  ],
+  "analyzer": "char_wb",
+  "total_samples": 337,
+  "metrics": {
+    "accuracy": 0.8382,
+    "precision": 0.8621,
+    "recall": 0.7812,
+    "f1": 0.8197,
+    "cv_f1_mean": 0.8633
+  },
+  "dataset": "command_synthetic",
+  "label_mapping": {
+    "0": "legitimate",
+    "1": "malicious"
+  }
+}

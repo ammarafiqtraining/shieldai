@@ -1,0 +1,23 @@
+{
+  "version": "v1",
+  "model_type": "LogisticRegression",
+  "vectorizer": "TfidfVectorizer",
+  "max_features": 5000,
+  "ngram_range": [
+    1,
+    2
+  ],
+  "training_samples": 27313,
+  "test_samples": 6828,
+  "metrics": {
+    "accuracy": 0.9956,
+    "precision": 0.9964,
+    "recall": 0.9947,
+    "f1": 0.9956
+  },
+  "dataset": "CEAS_08",
+  "label_mapping": {
+    "0": "legitimate",
+    "1": "phishing"
+  }
+}
